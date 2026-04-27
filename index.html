@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大棚环境控制系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="main">
+        <div class="header">
+            <h1 class="header-title">大棚环境<span>控制系统</span></h1>
+            <div class="header-right">
+                <div class="header-status">
+                    <div class="status-dot offline" id="status-dot"></div>
+                    <span class="status-text" id="status-text">连接中...</span>
+                </div>
+                <div class="user-menu">
+                    <span class="user-email" id="user-email"></span>
+                    <button class="logout-btn" id="btn-logout">退出</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-page active" id="page-sensor">
+            <div class="section-title">传感器数据</div>
+            <div class="sensor-grid" id="sensor-grid"></div>
+        </div>
+
+        <div class="mobile-page" id="page-control">
+            <div class="control-section">
+                <div class="control-panel">
+                    <div class="section-title">设备控制</div>
+                    <div class="mode-switch">
+                        <span class="mode-label">工作模式</span>
+                        <div class="mode-toggle">
+                            <button class="mode-btn" data-mode="0">自动模式</button>
+                            <button class="mode-btn active" data-mode="1">手动模式</button>
+                        </div>
+                    </div>
+                    <div class="device-grid">
+                        <div class="device-item">
+                            <div class="device-info">
+                                <div class="device-icon fan">🌀</div>
+                                <div>
+                                    <div class="device-name">风扇</div>
+                                    <div class="device-status" id="fan-status">已关闭</div>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="switch-fan">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="device-item">
+                            <div class="device-info">
+                                <div class="device-icon jsq">💨</div>
+                                <div>
+                                    <div class="device-name">加湿器</div>
+                                    <div class="device-status" id="jsq-status">已关闭</div>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="switch-jsq">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="device-item">
+                            <div class="device-info">
+                                <div class="device-icon led">💡</div>
+                                <div>
+                                    <div class="device-name">灯光</div>
+                                    <div class="device-status" id="led-status">已关闭</div>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="switch-led">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="device-item">
+                            <div class="device-info">
+                                <div class="device-icon beep">🔊</div>
+                                <div>
+                                    <div class="device-name">蜂鸣器</div>
+                                    <div class="device-status" id="beep-status">已关闭</div>
+                                </div>
+                            </div>
+                            <span style="font-size:14px;color:#95a5a6">自动控制</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="section-title">阈值设置</div>
+                    <div class="threshold-grid">
+                        <div class="threshold-item">
+                            <span class="threshold-label">🌡 温度阈值</span>
+                            <div>
+                                <input type="number" class="threshold-input" id="threshold-temp" value="30" min="0" max="50">
+                                <span class="threshold-unit">°C</span>
+                            </div>
+                        </div>
+                        <div class="threshold-item">
+                            <span class="threshold-label">💧 湿度阈值</span>
+                            <div>
+                                <input type="number" class="threshold-input" id="threshold-humi" value="45" min="0" max="100">
+                                <span class="threshold-unit">%</span>
+                            </div>
+                        </div>
+                        <div class="threshold-item">
+                            <span class="threshold-label">☀ 光照阈值</span>
+                            <div>
+                                <input type="number" class="threshold-input" id="threshold-light" value="15" min="0" max="100">
+                                <span class="threshold-unit">lux</span>
+                            </div>
+                        </div>
+                        <div class="threshold-item">
+                            <span class="threshold-label">🏭 CO2阈值</span>
+                            <div>
+                                <input type="number" class="threshold-input" id="threshold-co2" value="65" min="0" max="100">
+                                <span class="threshold-unit">ppm</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="threshold-save" id="btn-save-threshold">保存阈值设置</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-page" id="page-trend">
+            <div class="history-section">
+                <div class="history-header">
+                    <div class="section-title" style="margin-bottom:0">历史趋势</div>
+                    <div class="history-tabs">
+                        <button class="history-tab active" data-range="1h">1小时</button>
+                        <button class="history-tab" data-range="6h">6小时</button>
+                        <button class="history-tab" data-range="24h">24小时</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="history-chart" class="chart-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-page" id="page-query">
+            <div class="query-section">
+                <div class="section-title">历史数据查询</div>
+                <div class="query-bar">
+                    <div class="query-field">
+                        <label>开始时间</label>
+                        <input type="datetime-local" id="query-start">
+                    </div>
+                    <div class="query-field">
+                        <label>结束时间</label>
+                        <input type="datetime-local" id="query-end">
+                    </div>
+                    <button class="query-btn" id="btn-query-history">查询</button>
+                    <button class="query-btn query-btn-secondary" id="btn-export-csv">导出CSV</button>
+                </div>
+                <div class="query-table-wrap">
+                    <table class="query-table" id="query-table">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>温度(°C)</th>
+                                <th>湿度(%)</th>
+                                <th>光照(lux)</th>
+                                <th>CO2(ppm)</th>
+                                <th>风扇</th>
+                                <th>加湿器</th>
+                                <th>灯光</th>
+                                <th>蜂鸣器</th>
+                                <th>模式</th>
+                            </tr>
+                        </thead>
+                        <tbody id="query-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="query-footer" id="query-footer"></div>
+            </div>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-page="sensor">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">总览</span>
+        </div>
+        <div class="nav-item" data-page="control">
+            <span class="nav-icon">🎛</span>
+            <span class="nav-text">控制</span>
+        </div>
+        <div class="nav-item" data-page="trend">
+            <span class="nav-icon">📈</span>
+            <span class="nav-text">趋势</span>
+        </div>
+        <div class="nav-item" data-page="query">
+            <span class="nav-icon">📋</span>
+            <span class="nav-text">查询</span>
+        </div>
+        <div class="nav-item" id="btn-settings">
+            <span class="nav-icon">⚙</span>
+            <span class="nav-text">设置</span>
+        </div>
+    </nav>
+
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">系统设置</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3 class="settings-section-title">账号信息</h3>
+                    <div class="settings-item">
+                        <span class="settings-label">邮箱</span>
+                        <span class="settings-value" id="settings-email">-</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-label">用户ID</span>
+                        <span class="settings-value settings-value-small" id="settings-uid">-</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-label">注册时间</span>
+                        <span class="settings-value" id="settings-created">-</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-label">最后登录</span>
+                        <span class="settings-value" id="settings-last-login">-</span>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3 class="settings-section-title">系统信息</h3>
+                    <div class="settings-item">
+                        <span class="settings-label">设备状态</span>
+                        <span class="settings-value" id="settings-device-status">离线</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-label">数据记录</span>
+                        <span class="settings-value" id="settings-data-count">0 条</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-danger" id="btn-change-password">修改密码</button>
+                <button class="modal-btn modal-btn-primary" id="modal-confirm">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

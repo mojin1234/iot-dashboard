@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 大棚环境控制系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">🌐</div>
+                <h1 class="login-title">大棚环境控制系统</h1>
+                <p class="login-subtitle">Greenhouse Environmental Control</p>
+            </div>
+
+            <div class="login-tabs">
+                <button class="login-tab active" data-tab="login">登录</button>
+                <button class="login-tab" data-tab="register">注册</button>
+            </div>
+
+            <form id="login-form" class="login-form active">
+                <div class="form-group">
+                    <label class="form-label">邮箱</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="请输入邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">密码</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="请输入密码" required>
+                </div>
+                <div class="form-error" id="login-error"></div>
+                <button type="submit" class="login-btn" id="btn-login">登录</button>
+                <div class="form-footer">
+                    <a href="#" id="link-forgot" class="form-link">忘记密码？</a>
+                </div>
+            </form>
+
+            <form id="register-form" class="login-form">
+                <div class="form-group">
+                    <label class="form-label">邮箱</label>
+                    <input type="email" id="register-email" class="form-input" placeholder="请输入邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">密码</label>
+                    <input type="password" id="register-password" class="form-input" placeholder="请输入密码（至少6位）" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">确认密码</label>
+                    <input type="password" id="register-confirm" class="form-input" placeholder="请再次输入密码" required>
+                </div>
+                <div class="form-error" id="register-error"></div>
+                <button type="submit" class="login-btn" id="btn-register">注册</button>
+            </form>
+
+            <form id="forgot-form" class="login-form">
+                <div class="form-group">
+                    <label class="form-label">邮箱</label>
+                    <input type="email" id="forgot-email" class="form-input" placeholder="请输入注册邮箱" required>
+                </div>
+                <div class="form-error" id="forgot-error"></div>
+                <button type="submit" class="login-btn" id="btn-reset">发送重置邮件</button>
+                <div class="form-footer">
+                    <a href="#" id="link-back-login" class="form-link">返回登录</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
